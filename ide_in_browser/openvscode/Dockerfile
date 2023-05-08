@@ -28,7 +28,8 @@ RUN echo $OPENVSCODE
 # Default exposed port if none is specified
 EXPOSE 8080
 
-RUN printf "#!/bin/bash\necho $pwd\n${OPENVSCODE} --host 0.0.0.0 --without-connection-token --disable-telemetry" > /usr/local/bin/openvscode
+# Create launch script and symlink to the default editor launcher 
+RUN printf "#!/bin/bash\n/home/.openvscode-server/bin/openvscode-server --host 0.0.0.0  --port  8080 --without-connection-token --disable-telemetry" > /usr/local/bin/openvscode
 
 # #install HF Extension
 # #ref from https://github.com/gitpod-io/openvscode-server
@@ -39,4 +40,5 @@ RUN cd /home/openvscode_extensions/ && \
     for ext in *; do ${OPENVSCODE} --install-extension "${ext}"; done
 
 
-CMD ["/home/.openvscode-server//bin/openvscode-server","--host", "0.0.0.0", "--without-connection-token","--port", "8080"]
+#CMD ["/home/.openvscode-server/bin/openvscode-server","--host", "0.0.0.0", "--without-connection-token","--port", "8080"]
+CMD ["bash", "/usr/local/bin/openvscode"]
