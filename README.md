@@ -1,2 +1,2 @@
 # dockerfiles
-Dockerfiles for various apps
+Dockerfile recipes

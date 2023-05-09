@@ -1,3 +1,2 @@
 #! /bin/bash
-echo ${OPENVSCODE}
-${OPENVSCODE} --host 0.0.0.0 --without-connection-token
+/home/.openvscode-server/bin/openvscode-server --host 0.0.0.0 --port 8080 --without-connection-token

@@ -16,6 +16,9 @@ RUN cd /home/openvscode/ && \
     cp ${OPENVSCODE_SERVER_ROOT}/bin/remote-cli/openvscode-server ${OPENVSCODE_SERVER_ROOT}/bin/remote-cli/code && \
     rm -f openvscode-server-v1.78.0-linux-x64.tar.gz
 
+# RUN chmod -R 755 ${OPENVSCODE_SERVER_ROOT}/bin/remote-cli/code
+# RUN chmod -R 755 ${OPENVSCODE_SERVER_ROOT}/bin/remote-cli/openvscode-server
+
 
 ENV EDITOR=code \
     VISUAL=code \
@@ -28,8 +31,17 @@ RUN echo $OPENVSCODE
 # Default exposed port if none is specified
 EXPOSE 8080
 
-# Create launch script and symlink to the default editor launcher 
-RUN printf "#!/bin/bash\n/home/.openvscode-server/bin/openvscode-server --host 0.0.0.0  --port  8080 --without-connection-token --disable-telemetry" > /usr/local/bin/openvscode
+# # Create launch script and symlink to the default editor launcher 
+# RUN printf "#!/bin/bash\n/home/.openvscode-server/bin/openvscode-server --host 0.0.0.0  --port=8080 --without-connection-token --disable-telemetry" > /usr/local/bin/openvscode
+
+COPY ./configs/openvscode-start.sh /usr/local/bin/
+RUN chmod 777 /usr/local/bin/openvscode-start.sh
+
+RUN ln -s /usr/local/bin/openvscode-start.sh /usr/local/bin/runtime
+RUN chmod 777 /usr/local/bin/runtime
+
+
+
 
 # #install HF Extension
 # #ref from https://github.com/gitpod-io/openvscode-server
@@ -41,4 +53,5 @@ RUN cd /home/openvscode_extensions/ && \
 
 
 #CMD ["/home/.openvscode-server/bin/openvscode-server","--host", "0.0.0.0", "--without-connection-token","--port", "8080"]
-CMD ["bash", "/usr/local/bin/openvscode"]
+#CMD ["bash", "/usr/local/bin/openvscode"]
+CMD ["bash", "/usr/local/bin/runtime"]
